@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_videoFrame"
+        android:icon="@drawable/camera"
+        app:showAsAction="ifRoom"
+        android:title="TODO" />
+    <item android:id="@+id/menu_done"
+        android:title="@string/Menu_done"
+        app:showAsAction="ifRoom"/>
+</menu>

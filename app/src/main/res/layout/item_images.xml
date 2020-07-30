@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:layout_margin="@dimen/_1sdp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:padding="@dimen/_2sdp"
+        android:gravity="center"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_118sdp"
+        android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:background="#00000000"
+            app:cardCornerRadius="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp">
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitXY"
+                android:id="@+id/img_imageIcon"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"/>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:textSize="@dimen/_12sdp"
+            tools:text="Ảnh số 1"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:id="@+id/tv_titleImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_18sdp"/>
+    </LinearLayout>
+</LinearLayout>

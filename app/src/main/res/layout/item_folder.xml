@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/folder" />
+    <TextView
+        android:maxLength="15"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:id="@+id/tv_folderSlide"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        tools:text="Camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
