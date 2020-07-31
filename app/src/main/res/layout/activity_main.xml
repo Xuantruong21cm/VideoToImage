@@ -2,43 +2,43 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/layout_main"
-    android:padding="@dimen/_4sdp"
-    android:onClick="NoClick"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="NoClick"
+    android:padding="@dimen/_4sdp"
     tools:context=".activity.MainActivity">
 
     <LinearLayout
-        android:weightSum="15"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="15">
 
         <LinearLayout
-            android:layout_marginTop="@dimen/_8sdp"
-            android:weightSum="10"
-            android:orientation="vertical"
-            android:layout_weight="12.5"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_weight="12.5"
+            android:orientation="vertical"
+            android:weightSum="10">
 
             <LinearLayout
-                android:background="@drawable/custom_clickview"
-                android:layout_marginTop="@dimen/_24sdp"
                 android:id="@+id/item_selectVideo"
-                android:weightSum="3"
-                android:orientation="horizontal"
-                android:padding="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_weight="2"
+                android:background="@drawable/custom_clickview"
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp"
+                android:weightSum="3">
 
                 <ImageView
-                    android:src="@drawable/videofolder"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/videofolder" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -51,199 +51,212 @@
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/custom_clickview"
-                android:layout_marginTop="@dimen/_24sdp"
                 android:id="@+id/item_gallery"
-                android:weightSum="3"
-                android:orientation="horizontal"
-                android:padding="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_weight="2"
+                android:background="@drawable/custom_clickview"
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp"
+                android:weightSum="3">
 
                 <ImageView
-                    android:src="@drawable/galleryfolder"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/galleryfolder" />
+
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:gravity="center"
-                    android:textSize="@dimen/_22sdp"
-                    android:textStyle="bold"
                     android:text="@string/Gallery"
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/custom_clickview"
-                android:layout_marginTop="@dimen/_24sdp"
                 android:id="@+id/item_slideShowMarker"
-                android:weightSum="3"
-                android:orientation="horizontal"
-                android:padding="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
-
-                <ImageView
-                    android:src="@drawable/slideshowmarker"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:gravity="center"
-                    android:textSize="@dimen/_22sdp"
-                    android:textStyle="bold"
-                    android:text="@string/Slide_Show_Marker"
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="@drawable/custom_clickview"
                 android:layout_marginTop="@dimen/_24sdp"
-                android:id="@+id/item_setting"
-                android:weightSum="3"
+                android:layout_weight="2"
+                android:background="@drawable/custom_clickview"
                 android:orientation="horizontal"
                 android:padding="@dimen/_8sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2">
+                android:weightSum="3">
 
                 <ImageView
-                    android:src="@drawable/setting"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:src="@drawable/slideshowmarker" />
+
                 <TextView
-                    android:gravity="center"
-                    android:textSize="@dimen/_22sdp"
-                    android:textStyle="bold"
-                    android:text="@string/Settings"
-                    android:layout_weight="2"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/Slide_Show_Marker"
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
-                android:paddingLeft="@dimen/_4sdp"
-                android:paddingRight="@dimen/_4sdp"
-                android:gravity="center"
+                android:id="@+id/item_setting"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.5">
+                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_weight="2"
+                android:background="@drawable/custom_clickview"
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp"
+                android:weightSum="3">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/setting" />
+
                 <TextView
-                    android:background="#302E2E"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/Settings"
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:paddingLeft="@dimen/_4sdp"
+                android:paddingRight="@dimen/_4sdp">
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="2px"/>
+                    android:layout_height="2px"
+                    android:background="#302E2E" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
-            android:onClick="NoClick"
-            android:weightSum="3"
-            android:orientation="horizontal"
-            android:layout_weight="2.5"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="2.5"
+            android:onClick="NoClick"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <LinearLayout
-                android:background="@drawable/custom_clickview"
-                android:gravity="center"
-                android:weightSum="3"
-                android:layout_weight="1"
-                android:layout_width="0dp"
                 android:id="@+id/item_share"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/custom_clickview"
+                android:gravity="center"
+                android:weightSum="3">
+
                 <LinearLayout
-                    android:weightSum="3"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="2.5"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
                     <ImageView
-                        android:scaleType="centerInside"
-                        android:src="@drawable/share"
-                        android:layout_weight="2"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/share" />
+
                     <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/_18sdp"
                         android:text="@string/Share"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/custom_clickview"
-                android:gravity="center"
-                android:weightSum="3"
-                android:layout_weight="1"
-                android:layout_width="0dp"
                 android:id="@+id/item_rateUS"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/custom_clickview"
+                android:gravity="center"
+                android:weightSum="3">
+
                 <LinearLayout
-                    android:weightSum="3"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="2.5"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
                     <ImageView
-                        android:scaleType="centerInside"
-                        android:src="@drawable/rateus"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/rateus" />
+
                     <TextView
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/_18sdp"
-                        android:text="@string/Rate_Us"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/Rate_Us"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/item_aboutUs"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@drawable/custom_clickview"
                 android:gravity="center"
-                android:weightSum="3"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:id="@+id/item_aboutUs"
-                android:layout_height="match_parent">
+                android:weightSum="3">
+
                 <LinearLayout
-                    android:weightSum="3"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="2.5"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
                     <ImageView
-                        android:scaleType="centerInside"
-                        android:src="@drawable/aboutus"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:scaleType="centerInside"
+                        android:src="@drawable/aboutus" />
+
                     <TextView
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/_18sdp"
-                        android:text="@string/About_Us"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/About_Us"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-        
+
         </LinearLayout>
     </LinearLayout>
-
-
 </FrameLayout>

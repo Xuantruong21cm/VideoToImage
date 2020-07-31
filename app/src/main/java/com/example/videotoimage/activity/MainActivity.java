@@ -2,6 +2,7 @@ package com.example.videotoimage.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.Constraints;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -12,16 +13,20 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.videotoimage.R;
@@ -30,11 +35,16 @@ import com.example.videotoimage.fragments.Settings_Fragment;
 import com.example.videotoimage.fragments.SlideShow_Fragment;
 import com.example.videotoimage.model.Folder;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
     private LinearLayout item_selectVideo, item_gallery,
             item_sildeShowMarker, item_settings, item_share,
             item_rateUs, item_aboutUs;
-    // public static List<Folder> myList;
+
+    RatingBar ratingBar ;
+    ImageView img_rateStar ;
+
 
     Folder folder ;
     @Override
@@ -92,13 +102,33 @@ public class MainActivity extends AppCompatActivity {
         item_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ApplicationInfo api = getApplicationContext().getApplicationInfo();
+                String apkpath = api.sourceDir ;
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, apkpath);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
          item_rateUs.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+                 Dialog dialog = new Dialog(MainActivity.this) ;
+                 dialog.setContentView(R.layout.dialog_rateus);
+                  ratingBar = dialog.findViewById(R.id.ratingbar_star);
+                  img_rateStar = dialog.findViewById(R.id.img_rateStar) ;
+                 img_rateStar.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         Toast.makeText(getApplicationContext(),"Thank You For Rate",Toast.LENGTH_SHORT).show();
+                         dialog.dismiss();
+                     }
+                 });
 
+                 dialog.show();
+                 Window window = dialog.getWindow();
+                 window.setLayout(Constraints.LayoutParams.MATCH_PARENT, Constraints.LayoutParams.WRAP_CONTENT);
              }
          });
 
@@ -108,12 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 Dialog dialog = new Dialog(MainActivity.this) ;
                 dialog.setContentView(R.layout.dialog_aboutus);
                 dialog.setCanceledOnTouchOutside(false);
-//                ImageView img_aboutUs = dialog.findViewById(R.id.img_aboutUs) ;
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.me);
-//                RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(),bitmap) ;
-//                img.setCornerRadius(15.0f);
-//                img.setAntiAlias(true);
-//                img_aboutUs.setImageDrawable(img);
 
                 Button btn_ok_aboutUs = dialog.findViewById(R.id.btn_ok_aboutUs);
                 btn_ok_aboutUs.setOnClickListener(view ->{dialog.dismiss();});

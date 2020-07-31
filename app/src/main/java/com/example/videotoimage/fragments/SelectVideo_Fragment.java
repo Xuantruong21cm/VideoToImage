@@ -136,6 +136,7 @@ public class SelectVideo_Fragment extends Fragment {
         File file = new File(root_sd);
         getAllStuff(file,"");
     }
+
     private class Doing extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute() {
