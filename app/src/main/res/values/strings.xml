@@ -38,4 +38,26 @@
     <string name="Enter_Your_Text">Enter Your Text</string>
     <string name="Emoji">Emoji</string>
     <string name="Save_Image_Complete">Save Image Complete</string>
+    <string name="Done">Done</string>
+
+    <string-array name="File_format">
+        <item>PNG</item>
+        <item>JPG</item>
+    </string-array>
+
+    <string-array name="Quality">
+        <item>Best</item>
+        <item>Very High</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
+
+    <string-array name="Size">
+        <item>0.5x</item>
+        <item>1x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+        <item>3x</item>
+    </string-array>
 </resources>

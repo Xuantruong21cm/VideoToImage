@@ -128,7 +128,6 @@ public class SlideShow_Fragment extends Fragment {
                         String nameVideo = f.getName();
                         if (nameVideo.endsWith(".jpg")) {
                             count++;
-                            myList.add(new FolderSlide(name, file.toString(), count));
                             Log.d("xxx", "getAllStuff: " + name + " | " + file.toString());
                         }
                     }
@@ -218,29 +217,29 @@ public class SlideShow_Fragment extends Fragment {
             String pathImage = cursor.getString(path);
             imagesList.add(new Images(titImage, pathImage));
         }
-        recyclerView_SlideImage.setHasFixedSize(true);
-        gridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 3);
-        imageSlide_adapter = new ImageSlide_Adapter(imagesList, getActivity().getApplicationContext());
-        recyclerView_SlideImage.setLayoutManager(gridLayoutManager);
-        recyclerView_SlideImage.setAdapter(imageSlide_adapter);
-        imageSlide_adapter.ImageClickListener(new Images_ClickListener() {
-            @Override
-            public void OnClick(Images images) {
-                list_imgChoice.add(images.getPath());
-                choiceAdapter = new ImageChoice_Adapter(list_imgChoice, getContext());
-                recyclerView_imageChoice.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-                recyclerView_imageChoice.setHasFixedSize(true);
-                recyclerView_imageChoice.setAdapter(choiceAdapter);
-                adapter.notifyItemChanged(list_imgChoice.size());
-                choiceAdapter.ImageChoi_OnClick(new ImageChoice_OnClick() {
-                    @Override
-                    public void OnClick(int positon) {
-                        list_imgChoice.remove(positon);
-                        choiceAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
+//        recyclerView_SlideImage.setHasFixedSize(true);
+//        gridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 3);
+      //  imageSlide_adapter = new ImageSlide_Adapter(imagesList, getActivity().getApplicationContext());
+//        recyclerView_SlideImage.setLayoutManager(gridLayoutManager);
+//        recyclerView_SlideImage.setAdapter(imageSlide_adapter);
+//        imageSlide_adapter.ImageClickListener(new Images_ClickListener() {
+//            @Override
+//            public void OnClick(Images images) {
+//                list_imgChoice.add(images.getPath());
+//                choiceAdapter = new ImageChoice_Adapter(list_imgChoice, getContext());
+//                recyclerView_imageChoice.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+//                recyclerView_imageChoice.setHasFixedSize(true);
+//                recyclerView_imageChoice.setAdapter(choiceAdapter);
+//                adapter.notifyItemChanged(list_imgChoice.size());
+//                choiceAdapter.ImageChoi_OnClick(new ImageChoice_OnClick() {
+//                    @Override
+//                    public void OnClick(int positon) {
+//                        list_imgChoice.remove(positon);
+//                        choiceAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//            }
+//        });
 
     }
 

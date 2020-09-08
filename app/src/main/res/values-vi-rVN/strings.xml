@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Video To Photo</string>
+    <string name="Settings">Cài Đặt</string>
+    <string name="Gallery">Thư Viện</string>
+    <string name="Slide_Show_Marker">Trình Chiếu</string>
+    <string name="Select_Video">Chọn Video</string>
+    <string name="Share">Chia Sẻ</string>
+    <string name="Rate_Us">Đánh Giá</string>
+    <string name="About_Us">Thông Tin</string>
+    <string name="Toast_Permission">" Vui lòng cấp quyền truy cập ứng dụng"</string>
+    <string name="Menu_done">Hoàn Tất</string>
+    <string name="Quick_Capture">Cắt Nhanh</string>
+    <string name="Time_Capture">Theo Thời Gian</string>
+    <string name="File_Format">Định Dạng File</string>
+    <string name="Quality">Chất Lượng</string>
+    <string name="Size">Kích Thước</string>
+    <string name="Time_snap">Nhập Thời Gian ( giây )</string>
+    <string name="Cancel">Hủy</string>
+    <string name="Ok">Ok</string>
+    <string name="Video_Length">Thời gian không được dài hơn thời lượng video</string>
+    <string name="Status_Quotes">Trạng Thái</string>
+    <string name="Author">Tác Giả</string>
+    <string name="HDP_Solution">HDP Solution</string>
+    <string name="Privacy_Policy">Privacy Policy</string>
+    <string name="web_policy">http://hdpsolution.com/privacy_policy/CameraApps/PrivacyPolicyCameraApp.html</string>
+    <string name="Email">Email:</string>
+    <string name="email_detail">Support@hdpsolution.com</string>
+    <string name="Clear_Button">Xóa Tất Cả</string>
+    <string name="Create">Tạo</string>
+    <string name="Save">Lưu</string>
+    <string name="Edit">Sửa</string>
+    <string name="Delete">Xóa</string>
+    <string name="Cut">Cắt</string>
+    <string name="Text">Chữ</string>
+    <string name="Sticker">Sticker</string>
+    <string name="Paint">Vẽ</string>
+    <string name="Stroke_Size">Kích Thước Vẽ</string>
+    <string name="Enter_Your_Text">Nhập chữ của bản</string>
+    <string name="Emoji">Emoji</string>
+    <string name="Save_Image_Complete">Lưu ảnh thành công</string>
+    <string name="Done">Xong</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="JPG"
+        android:entries="@array/File_format"
+        android:title="@string/File_Format"
+        android:key="format"
+        android:entryValues="@array/File_format"/>
+    <ListPreference
+        android:defaultValue="High"
+        android:entries="@array/Quality"
+        android:title="@string/Quality"
+        android:key="quality"
+        android:entryValues="@array/Quality"/>
+    <ListPreference
+        android:defaultValue="1x"
+        android:entryValues="@array/Size"
+        android:title="@string/Size"
+        android:key="size"
+        android:entries="@array/Size"/>
+</PreferenceScreen>

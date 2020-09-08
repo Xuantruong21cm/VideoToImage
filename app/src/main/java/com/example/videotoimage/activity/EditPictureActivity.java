@@ -1,7 +1,12 @@
 package com.example.videotoimage.activity;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,6 +17,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +33,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -35,18 +43,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.videotoimage.R;
 import com.example.videotoimage.adapter.Emoji_Adapter;
+import com.example.videotoimage.adapter.Sticker_Adapter;
+import com.example.videotoimage.fragments.PictureGallery_Fragment;
 import com.example.videotoimage.interface_.Emoji_OnClickListener;
+import com.example.videotoimage.interface_.Sticker_OnClickListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import ja.burhanrashid52.photoeditor.OnSaveBitmap;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
 import yuku.ambilwarna.AmbilWarnaDialog;
@@ -60,7 +74,8 @@ public class EditPictureActivity extends AppCompatActivity {
     Typeface mTypeface;
     Typeface mEmojiTypeFace;
     PhotoEditor mPhotoEditor;
-    FrameLayout frame_editPicture, layout_addText_Picture, frame_PhotoEditorView, frame_cropImageView, layout_cutControl_Picture;
+    FrameLayout frame_editPicture, layout_addText_Picture, frame_PhotoEditorView, frame_cropImageView,
+    layout_activity_edit_picture, layout_cutControl_Picture;
     ImageView img_closeEdit_Picture, img_colorPick_Paint, img_back_Paint,
             img_colorPick_addText, img_ADD_addText, img_back_addText,
             img_redoEdit_Picture, img_undoEdit_Picture, img_rotate_left, img_flipImageHorizontally, img_flipVertical,
@@ -75,9 +90,11 @@ public class EditPictureActivity extends AppCompatActivity {
     RecyclerView recyclerView_emoji;
     List<String> emojisList;
     Emoji_Adapter emoji_adapter;
-    Bitmap bitmap = null;
+    Bitmap bitmap = null, sticker = null;
     Bitmap cropped = null;
     OutputStream outputStream;
+    List<Integer> stickerList;
+    Sticker_Adapter sticker_adapter;
 
     int mDefaultColor;
 
@@ -92,6 +109,7 @@ public class EditPictureActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        layout_activity_edit_picture = findViewById(R.id.layout_activity_edit_picture);
         img_back_cutPicture = findViewById(R.id.img_back_cutPicture);
         img_rotate_right = findViewById(R.id.img_rotate_right);
         img_flipImageHorizontally = findViewById(R.id.img_flipImageHorizontally);
@@ -160,12 +178,72 @@ public class EditPictureActivity extends AppCompatActivity {
                 .setDefaultEmojiTypeface(mEmojiTypeFace).build();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (layout_controlPicture.getVisibility() == View.INVISIBLE && frame_editPicture.getVisibility() == View.VISIBLE
+                && img_closeEdit_Picture.getVisibility() == View.VISIBLE) {
+            layout_controlPicture.setVisibility(View.VISIBLE);
+            frame_editPicture.setVisibility(View.INVISIBLE);
+            img_closeEdit_Picture.setVisibility(View.INVISIBLE);
+        } else if (frame_PhotoEditorView.getVisibility() == View.INVISIBLE && frame_cropImageView.getVisibility() == View.VISIBLE
+                && layout_cutControl_Picture.getVisibility() == View.VISIBLE && frame_editPicture.getVisibility() == View.INVISIBLE
+                && img_undoEdit_Picture.getVisibility() == View.INVISIBLE && img_redoEdit_Picture.getVisibility() == View.INVISIBLE
+                && img_closeEdit_Picture.getVisibility() == View.INVISIBLE) {
+            frame_PhotoEditorView.setVisibility(View.VISIBLE);
+            frame_cropImageView.setVisibility(View.INVISIBLE);
+            layout_cutControl_Picture.setVisibility(View.INVISIBLE);
+            frame_editPicture.setVisibility(View.VISIBLE);
+            img_undoEdit_Picture.setVisibility(View.VISIBLE);
+            img_redoEdit_Picture.setVisibility(View.VISIBLE);
+            img_closeEdit_Picture.setVisibility(View.VISIBLE);
+        } else if (layout_addText_Picture.getVisibility() == View.VISIBLE && frame_editPicture.getVisibility() == View.INVISIBLE
+                && img_closeEdit_Picture.getVisibility() == View.INVISIBLE && img_undoEdit_Picture.getVisibility() == View.INVISIBLE
+                && img_redoEdit_Picture.getVisibility() == View.INVISIBLE) {
+            layout_addText_Picture.setVisibility(View.INVISIBLE);
+            frame_editPicture.setVisibility(View.VISIBLE);
+            img_closeEdit_Picture.setVisibility(View.VISIBLE);
+            img_undoEdit_Picture.setVisibility(View.VISIBLE);
+            img_redoEdit_Picture.setVisibility(View.VISIBLE);
+        } else if (layout_controlPaint.getVisibility() == View.VISIBLE && frame_editPicture.getVisibility() == View.INVISIBLE
+                && img_closeEdit_Picture.getVisibility() == View.INVISIBLE && img_undoEdit_Picture.getVisibility() == View.INVISIBLE
+                && img_redoEdit_Picture.getVisibility() == View.INVISIBLE) {
+            layout_controlPaint.setVisibility(View.INVISIBLE);
+            frame_editPicture.setVisibility(View.VISIBLE);
+            img_closeEdit_Picture.setVisibility(View.VISIBLE);
+            img_undoEdit_Picture.setVisibility(View.VISIBLE);
+            img_redoEdit_Picture.setVisibility(View.VISIBLE);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditPictureActivity.this);
+            builder.setTitle("Exit !!!");
+            builder.setMessage("Do you want exit, image don't save !!!");
+            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.show();
+        }
+    }
+
     private void initListener() {
         //Nút Share trong control Picture
         layout_shareEditPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
 
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/*") ;
+                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
+                startActivity(Intent.createChooser(share,"Share via"));
             }
         });
 
@@ -180,14 +258,30 @@ public class EditPictureActivity extends AppCompatActivity {
                 img_redoEdit_Picture.setVisibility(View.VISIBLE);
             }
         });
-
         //Nút Delete trong control Picture
         layout_deletePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mPhotoEditor.clearAllViews();
+                File file = new File(path);
+                file.delete();
+                if (file.exists()){
+                    try {
+                        file.getCanonicalFile().delete();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (file.exists()){
+                        getApplicationContext().deleteFile(file.getAbsolutePath());
+                    }
+                }
+                CallBroadcast(file);
+                PictureGallery_Fragment.imagesList.remove(file);
+                PictureGallery_Fragment.adapter.notifyDataSetChanged();
+                finish();
             }
         });
+
 
         //Nút Close trong control Picture
         img_closeEdit_Picture.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +320,15 @@ public class EditPictureActivity extends AppCompatActivity {
 
         AddCut_Control();
 
+    }
+    public void CallBroadcast(File file){
+        if (Build.VERSION.SDK_INT <= 14){
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse(file.getAbsolutePath())));
+        }else {
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(file));
+            sendBroadcast(intent);
+        }
     }
 
     private void AddCut_Control() {
@@ -288,9 +391,55 @@ public class EditPictureActivity extends AppCompatActivity {
         item_sticker_Picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new StickerShow().execute();
             }
         });
+    }
+
+    public class StickerShow extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            bottomSheetDialog = new BottomSheetDialog(EditPictureActivity.this);
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet_emoji);
+            bottomSheetDialog.setCanceledOnTouchOutside(false);
+            recyclerView_emoji = bottomSheetDialog.findViewById(R.id.recyclerView_emoji);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            stickerList = new ArrayList<>();
+            stickerList.add(R.drawable.sticker_clreaming);
+            stickerList.add(R.drawable.sticker_cool);
+            stickerList.add(R.drawable.sticker_hello);
+            stickerList.add(R.drawable.sticker_hi);
+            stickerList.add(R.drawable.sticker_idea);
+            stickerList.add(R.drawable.sticker_lit);
+            stickerList.add(R.drawable.sticker_loveyou);
+            stickerList.add(R.drawable.sticker_ok);
+            stickerList.add(R.drawable.sticker_thank);
+            stickerList.add(R.drawable.sticker_whatup);
+
+            sticker_adapter = new Sticker_Adapter(stickerList, getApplicationContext());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            recyclerView_emoji.setVisibility(View.VISIBLE);
+            recyclerView_emoji.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+            recyclerView_emoji.setAdapter(sticker_adapter);
+            bottomSheetDialog.show();
+            sticker_adapter.Sticker_OnClick(new Sticker_OnClickListener() {
+                @Override
+                public void OnClick(int position) {
+                    sticker = BitmapFactory.decodeResource(getResources(), stickerList.get(position));
+                    mPhotoEditor.addImage(sticker);
+                    bottomSheetDialog.dismiss();
+                }
+            });
+        }
     }
 
     private void AddEmoji_Control() {
@@ -481,7 +630,7 @@ public class EditPictureActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_save:
+            case R.id.menu_done_Edit:
                 if (frame_PhotoEditorView.getVisibility() == View.INVISIBLE) {
                     cropped = cropImageView.getCroppedImage();
                     File filePath = Environment.getExternalStorageDirectory();
@@ -489,7 +638,7 @@ public class EditPictureActivity extends AppCompatActivity {
                     dir.mkdirs();
                     String name = System.currentTimeMillis() + ".jpg";
                     File file = new File(dir, name);
-                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{name}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
 
@@ -512,29 +661,55 @@ public class EditPictureActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(getApplicationContext(), R.string.Save_Image_Complete, Toast.LENGTH_SHORT).show();
-
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    cropped.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                    Intent intent = new Intent(EditPictureActivity.this,ViewPicture_Edited.class);
+                    intent.putExtra("image",file.getAbsolutePath());
+                    startActivity(intent);
                 } else {
                     File filePath = Environment.getExternalStorageDirectory();
-                    File dir = new File(filePath.getAbsolutePath() + "/VideoToImage/Images/");
+                    File dir = new File(filePath.getAbsolutePath() + "/VideoToImage/Images");
                     dir.mkdirs();
-                    String name = dir + String.valueOf(System.currentTimeMillis()) + ".jpg";
+                    String name = System.currentTimeMillis() + ".jpg";
+                    File file = new File(dir, name);
+                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+
+                        }
+                    });
+                    try {
+                        outputStream = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermission();
                     } else {
-                        mPhotoEditor.saveAsFile(name, new PhotoEditor.OnSaveListener() {
+                        mPhotoEditor.saveAsBitmap(new OnSaveBitmap() {
                             @Override
-                            public void onSuccess(@NonNull String imagePath) {
-                                Log.e("Success", "onSuccess: " + imagePath);
+                            public void onBitmapReady(Bitmap saveBitmap) {
+                                bitmap = saveBitmap ;
+                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                                try {
+                                    outputStream.flush();
+                                    outputStream.close();
+                                }catch (Exception e){}
+                                Toast.makeText(getApplicationContext(), R.string.Save_Image_Complete, Toast.LENGTH_SHORT).show();
+                                Log.d("ooo", "onBitmapReady: "+name);
+                                Intent intent = new Intent(EditPictureActivity.this,ViewPicture_Edited.class);
+                                intent.putExtra("image",file.getAbsolutePath());
+                                startActivity(intent);
                             }
 
                             @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.e("erroFaild", "onFailure: " + exception.getMessage());
+                            public void onFailure(Exception e) {
+
                             }
                         });
                         return true;
                     }
-                    Toast.makeText(getApplicationContext(), R.string.Save_Image_Complete, Toast.LENGTH_SHORT).show();
+
                 }
         }
         return super.onOptionsItemSelected(item);

@@ -29,7 +29,6 @@ public class EdittingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_save :
 
         }
         return super.onOptionsItemSelected(item);

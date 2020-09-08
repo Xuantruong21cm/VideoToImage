@@ -17,6 +17,18 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <TextView
+                    android:visibility="visible"
+                    android:padding="@dimen/_4sdp"
+                    android:id="@+id/tv_videoDuration"
+                    android:gravity="center|right"
+                    android:textColor="#FB0000"
+                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="bold"
+                    tools:text="69:96"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"/>
                 <androidx.cardview.widget.CardView
                     android:background="#00000000"
                     app:cardCornerRadius="@dimen/_8sdp"
@@ -28,17 +40,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
                 </androidx.cardview.widget.CardView>
-                <TextView
-                    android:padding="@dimen/_4sdp"
-                    android:id="@+id/tv_videoDuration"
-                    android:gravity="center|right"
-                    android:textColor="#FB0000"
-                    android:textSize="@dimen/_13sdp"
-                    android:textStyle="bold"
-                    tools:text="69:96"
-                    android:layout_gravity="bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_25sdp"/>
             </FrameLayout>
         </LinearLayout>
 

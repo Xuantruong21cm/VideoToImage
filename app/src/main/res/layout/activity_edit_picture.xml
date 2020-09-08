@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/_4sdp"
+    android:id="@+id/layout_activity_edit_picture"
+    android:background="#fff"
     android:onClick="NoClick"
     tools:context=".activity.EditPictureActivity">
 
@@ -262,7 +264,7 @@
                         android:weightSum="4">
 
                         <ImageView
-                            android:layout_width="match_parent"
+                            android:layout_width="90dp"
                             android:layout_height="0dp"
                             android:layout_weight="3"
                             android:scaleType="centerInside"
@@ -511,7 +513,7 @@
                     android:src="@drawable/back" />
 
             </LinearLayout>
-            <!--Layout control pain button-->
+            <!--Layout control paint button-->
 
         </FrameLayout>
 

@@ -33,6 +33,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import static android.os.Environment.DIRECTORY_MOVIES;
+
 
 public class SelectVideo_Fragment extends Fragment {
     static int count = 0;
@@ -121,20 +123,28 @@ public class SelectVideo_Fragment extends Fragment {
                 directoryName = list[i].getName();
                 getAllStuff(mfile,directoryName);
             } else {
-                if (list[i].getName().toLowerCase(Locale.getDefault()).endsWith(".mp4")){
+                if (list[i].getName().endsWith(".mp4") || list[i].getName().endsWith(".avi")
+                || list[i].getName().endsWith(".flv") || list[i].getName().endsWith(".mov") || list[i].getName().endsWith(".wmv")){
                     folderFound = true;
                 }
             }
         }
         if (folderFound){
-            myList.add(new Folder(name,file.toString(),count));
+            myList.add(new Folder(name,file.getAbsolutePath(),count));
         }
 
     }
     private void getAllFolder(){
-        String root_sd = Environment.getExternalStorageDirectory().toString();
-        File file = new File(root_sd);
-        getAllStuff(file,"");
+        if (Build.VERSION.SDK_INT <29){
+            File file = Environment.getExternalStorageDirectory();
+            getAllStuff(file,"");
+        }else if (Build.VERSION.SDK_INT >= 29){
+            File file = getContext().getExternalFilesDir(DIRECTORY_MOVIES);
+            getAllStuff(file,"");
+        }
+//        String root_sd = Environment.getExternalStoragePublicDirectory(DIRECTORY_MOVIES).toString();
+//        File file = new File(root_sd);
+//        getAllStuff(file,"");
     }
 
     private class Doing extends AsyncTask<Void, Void, Void>{
@@ -158,6 +168,9 @@ public class SelectVideo_Fragment extends Fragment {
             layoutManager = new LinearLayoutManager(getContext());
             adapter = new SelectVideo_Adapter(getContext(),myList);
             recyclerView.setHasFixedSize(true);
+            recyclerView.setItemViewCacheSize(20);
+//            recyclerView.setDrawingCacheEnabled(true);
+//            recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
             adapter.Video_OnClick(new Video_OnClickListerner() {

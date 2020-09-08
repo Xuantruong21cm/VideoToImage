@@ -1,7 +1,9 @@
 package com.example.videotoimage.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -30,10 +33,18 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.videotoimage.R;
+import com.example.videotoimage.activity.EditPictureActivity;
 import com.example.videotoimage.activity.GalleryActivity;
+import com.example.videotoimage.adapter.ImageSnaped_Adapter;
+import com.example.videotoimage.adapter.Image_TimeSnap_Adapter;
+import com.example.videotoimage.interface_.Images_ClickListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,6 +53,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
@@ -49,7 +61,7 @@ import wseemann.media.FFmpegMediaMetadataRetriever;
 public class VideoProcessing_Fragment extends Fragment {
     VideoView videoView_Play;
     ImageView img_controlVideo,img_closeTimeSnap;
-    public static ImageView img_snaped;
+    public RecyclerView recyclerView_img_snaped;
     TextView tv_timeStart, tv_timeToltal, tv_videoName, tv_timeSnap;
     SeekBar skb_durationVideo;
     CheckedTextView checked_quickCapture, checked_timeCapture;
@@ -57,6 +69,8 @@ public class VideoProcessing_Fragment extends Fragment {
     Bundle bundle;
     String title = "";
     String path = "";
+    String nameFile ;
+    File file ;
     long duration = 0;
     Uri uri;
     FFmpegMediaMetadataRetriever fm;
@@ -67,12 +81,18 @@ public class VideoProcessing_Fragment extends Fragment {
     public static int time, timesnap ;
     ArrayList<Bitmap> frameList ;
     MediaMetadataRetriever retriever ;
-
+    SharedPreferences preferences ;
+    RecyclerView recyclerView_TimeSnap ;
+    List<String> list_TimeSnap ;
+    Image_TimeSnap_Adapter adapter ;
+    public static List<String> list_imgSnaped ;
+    ImageSnaped_Adapter imageSnaped_adapter ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_video_processing_, container, false);
+        recyclerView_TimeSnap = view.findViewById(R.id.recyclerView_TimeSnap);
         videoView_Play = view.findViewById(R.id.videoView_Play);
         img_controlVideo = view.findViewById(R.id.img_controlVideo);
         tv_timeStart = view.findViewById(R.id.tv_timeStart);
@@ -83,8 +103,10 @@ public class VideoProcessing_Fragment extends Fragment {
         checked_quickCapture = view.findViewById(R.id.checked_quickCapture);
         checked_timeCapture = view.findViewById(R.id.checked_timeCapture);
         layout_timeSnapControl = view.findViewById(R.id.layout_timeSnapControl);
-        img_snaped = view.findViewById(R.id.img_snaped);
+        recyclerView_img_snaped = view.findViewById(R.id.recycler_img_snaped);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(getContext()) ;
+        list_imgSnaped = new ArrayList<>();
         checked_quickCapture.setChecked(true);
         layout_timeSnapControl.setVisibility(View.INVISIBLE);
         checked_timeCapture.setChecked(false);
@@ -92,8 +114,9 @@ public class VideoProcessing_Fragment extends Fragment {
         title = bundle.getString("titleVideo");
         path = bundle.getString("pathVideo");
         duration = bundle.getLong("durationVideo");
-        Uri uri = Uri.parse(path);
-        videoView_Play.setVideoURI(uri);
+
+        videoView_Play.setVideoURI(Uri.parse(path));
+        //videoView_Play.setVideoPath(path);
         videoView_Play.start();
         PlayStatus(img_controlVideo, videoView_Play);
         InfoVideo(skb_durationVideo, videoView_Play);
@@ -111,10 +134,9 @@ public class VideoProcessing_Fragment extends Fragment {
     }
 
     private void InfoVideo(SeekBar seekBar, VideoView videoView) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
         seekBar.setMax((int) duration);
-        tv_timeStart.setText(simpleDateFormat.format(videoView.getCurrentPosition()));
-        tv_timeToltal.setText(simpleDateFormat.format(duration));
+        tv_timeStart.setText(getTimeString(videoView.getCurrentPosition()));
+        tv_timeToltal.setText(getTimeString(duration));
         seekBar.setProgress(videoView.getCurrentPosition());
         tv_videoName.setText(title);
 
@@ -125,13 +147,28 @@ public class VideoProcessing_Fragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
-                tv_timeStart.setText(simpleDateFormat.format(videoView_Play.getCurrentPosition()));
+                tv_timeStart.setText(getTimeString(videoView_Play.getCurrentPosition()));
                 skb_durationVideo.setProgress(videoView_Play.getCurrentPosition());
                 handler.postDelayed(this, 500);
             }
         }, 100);
 
+    }
+    private String getTimeString(long millis) {
+        StringBuffer buf = new StringBuffer();
+
+        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+
+        buf
+                .append(String.format("%02d", hours))
+                .append(":")
+                .append(String.format("%02d", minutes))
+                .append(":")
+                .append(String.format("%02d", seconds));
+
+        return buf.toString();
     }
 
     private void initListener() {
@@ -184,8 +221,7 @@ public class VideoProcessing_Fragment extends Fragment {
         skb_durationVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
-                tv_timeStart.setText(simpleDateFormat.format(skb_durationVideo.getProgress()));
+                tv_timeStart.setText(getTimeString(videoView_Play.getCurrentPosition()));
             }
 
             @Override
@@ -207,21 +243,25 @@ public class VideoProcessing_Fragment extends Fragment {
                 checked_timeCapture.setBackgroundResource(R.drawable.chk_select_option);
                 checked_quickCapture.setChecked(false);
                 layout_timeSnapControl.setVisibility(View.VISIBLE);
+                recyclerView_img_snaped.setVisibility(View.INVISIBLE);
+                recyclerView_TimeSnap.setVisibility(View.VISIBLE);
             }
         });
 
         checked_quickCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                recyclerView_TimeSnap.setVisibility(View.INVISIBLE);
+                recyclerView_img_snaped.setVisibility(View.VISIBLE);
                 checked_timeCapture.setChecked(false);
                 checked_quickCapture.setChecked(true);
                 checked_quickCapture.setBackgroundResource(R.drawable.chk_select_option);
                 layout_timeSnapControl.setVisibility(View.INVISIBLE);
             }
         });
-        videoView_Play.setOnClickListener(new View.OnClickListener() {
+        videoView_Play.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 img_controlVideo.setVisibility(View.VISIBLE);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -229,6 +269,7 @@ public class VideoProcessing_Fragment extends Fragment {
                         img_controlVideo.setVisibility(View.GONE);
                     }
                 }, 3000);
+                return true;
             }
         });
         img_controlVideo.setOnClickListener(new View.OnClickListener() {
@@ -284,29 +325,43 @@ public class VideoProcessing_Fragment extends Fragment {
             uri = Uri.parse(path);
             fm = new FFmpegMediaMetadataRetriever();
             fm.setDataSource(getContext(), uri);
-
+            retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            bitmap = fm.getFrameAtTime(videoView_Play.getCurrentPosition()*1000, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
+            bitmap = retriever.getFrameAtTime((long)videoView_Play.getCurrentPosition()*1000);
             File filePath = Environment.getExternalStorageDirectory();
             File dir = new File(filePath.getAbsolutePath() + "/VideoToImage/Images");
             dir.mkdirs();
-            String name = System.currentTimeMillis() + ".jpg" ;
-            File file = new File(dir, name);
-            MediaScannerConnection.scanFile(getContext(), new String[]{name}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                @Override
-                public void onScanCompleted(String path, Uri uri) {
+            String value = preferences.getString("format","");
+            if (value.equalsIgnoreCase("PNG")){
+                Log.d("png", "doInBackground: "+preferences.getString(String.valueOf(R.string.File_Format),""));
+                nameFile = System.currentTimeMillis() + ".png" ;
+            }else {
+                Log.d("jpg", "doInBackground: "+preferences.getString(String.valueOf(R.string.File_Format),""));
+                nameFile = System.currentTimeMillis() + ".jpg" ;
+            }
 
-                }
-            });
+            file = new File(dir, nameFile);
             try {
                 outputStream = new FileOutputStream(file);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            String size = preferences.getString("quality","") ;
+            if (size.equalsIgnoreCase("Best")){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            }else if(size.equalsIgnoreCase("Very High")){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+            }else if(size.equalsIgnoreCase("High")){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
+            }else if (size.equalsIgnoreCase("Medium")){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
+            }else {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, outputStream);
+            }
             try {
                 outputStream.flush();
             } catch (IOException e) {
@@ -317,14 +372,46 @@ public class VideoProcessing_Fragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            MediaScannerConnection.scanFile(getContext(), new String[]{file.getAbsolutePath(),nameFile}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    Log.d("scan", "onScanCompleted: "+path + " | " + uri.toString());
+                }
+            });
+            list_imgSnaped.add(file.getAbsolutePath());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-           Glide.with(getContext()).load(bitmap).into(img_snaped);
+//           Glide.with(getContext()).load(bitmap).into(img_snaped);
+            imageSnaped_adapter = new ImageSnaped_Adapter(list_imgSnaped,getContext());
+            recyclerView_img_snaped.setHasFixedSize(true);
+            recyclerView_img_snaped.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+            recyclerView_img_snaped.setItemAnimator(new DefaultItemAnimator());
+            recyclerView_img_snaped.setAdapter(imageSnaped_adapter);
             videoView_Play.start();
+            imageSnaped_adapter.ClickImage(new Images_ClickListener() {
+                @Override
+                public void OnClick(int position) {
+                    Intent intent = new Intent(getContext(), EditPictureActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("path", list_imgSnaped.get(position));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+//            img_snaped.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getContext(), EditPictureActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("path", file.getAbsolutePath());
+//                    intent.putExtras(bundle);
+//                    startActivity(intent);
+//                }
+//            });
         }
     }
 
@@ -347,30 +434,49 @@ public class VideoProcessing_Fragment extends Fragment {
             int duration_second = duration_milisec/1000 ; //= 20s
             int frame_per_second = Integer.parseInt(tv_timeSnap.getText().toString().trim()) ;
             for (int i = frame_per_second; i <=duration_second ; i = i+frame_per_second) {
-                frameList.add(retriever.getFrameAtTime(i*1000000));
+                frameList.add(retriever.getFrameAtTime((long)i*1000000));
             }
             Log.d("jjjj", "onOptionsItemSelected: "+frameList.size());
+            list_TimeSnap = new ArrayList<>();
             for (int i = 0; i <frameList.size() ; i++) {
                 bitmapSnap = frameList.get(i) ;
                 File filePath = Environment.getExternalStorageDirectory();
                 File dir = new File(filePath.getAbsolutePath() + "/VideoToImage/Images");
                 dir.mkdirs();
-                String name = System.currentTimeMillis() + ".jpg" ;
-                File file = new File(dir, name);
-                MediaScannerConnection.scanFile(getContext(), new String[]{name}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-
-                    }
-                });
+                String value = preferences.getString("format","");
+                if (value.equalsIgnoreCase("PNG")){
+                    Log.d("png", "doInBackground: "+preferences.getString(String.valueOf(R.string.File_Format),""));
+                    nameFile = System.currentTimeMillis() + ".png" ;
+                }else {
+                    Log.d("jpg", "doInBackground: "+preferences.getString(String.valueOf(R.string.File_Format),""));
+                    nameFile = System.currentTimeMillis() + ".jpg" ;
+                }
+                File file = new File(dir, nameFile);
                 try {
                     outputStream = new FileOutputStream(file);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                String size = preferences.getString("quality","") ;
+                if (size.equalsIgnoreCase("Best")){
+                    bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                }else if(size.equalsIgnoreCase("Very High")){
+                    bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                }else if(size.equalsIgnoreCase("High")){
+                    bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
+                }else if (size.equalsIgnoreCase("Medium")){
+                    bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
+                }else {
+                    bitmapSnap.compress(Bitmap.CompressFormat.JPEG, 20, outputStream);
+                }
                 try {
                     outputStream.flush();
+                    MediaScannerConnection.scanFile(getContext(), new String[]{file.getAbsolutePath(),nameFile}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -379,6 +485,7 @@ public class VideoProcessing_Fragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                list_TimeSnap.add(file.getAbsolutePath());
             }
             return null;
         }
@@ -386,7 +493,22 @@ public class VideoProcessing_Fragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
+            Log.d("lll", "onPostExecute: "+list_TimeSnap.size());
+            adapter = new Image_TimeSnap_Adapter(list_TimeSnap,getContext());
+            recyclerView_TimeSnap.setHasFixedSize(true);
+            recyclerView_TimeSnap.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+            recyclerView_TimeSnap.setItemAnimator(new DefaultItemAnimator());
+            recyclerView_TimeSnap.setAdapter(adapter);
+            adapter.OnClickImage(new Images_ClickListener() {
+                @Override
+                public void OnClick(int position) {
+                    Intent intent = new Intent(getContext(), EditPictureActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("path", list_TimeSnap.get(position));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }
