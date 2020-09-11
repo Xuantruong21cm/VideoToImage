@@ -419,7 +419,6 @@ public class VideoProcessing_Fragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//           Glide.with(getContext()).load(bitmap).into(img_snaped);
             imageSnaped_adapter = new ImageSnaped_Adapter(list_imgSnaped,getContext());
             recyclerView_img_snaped.setHasFixedSize(true);
             recyclerView_img_snaped.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
@@ -437,16 +436,6 @@ public class VideoProcessing_Fragment extends Fragment {
                     startActivity(intent);
                 }
             });
-//            img_snaped.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(getContext(), EditPictureActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("path", file.getAbsolutePath());
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
-//                }
-//            });
         }
     }
 
@@ -549,11 +538,6 @@ public class VideoProcessing_Fragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Log.d("lll", "onPostExecute: "+list_TimeSnap.size());
-//            adapter = new Image_TimeSnap_Adapter(list_TimeSnap,getContext());
-//            recyclerView_TimeSnap.setHasFixedSize(true);
-//            recyclerView_TimeSnap.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-//            recyclerView_TimeSnap.setItemAnimator(new DefaultItemAnimator());
-//            recyclerView_TimeSnap.setAdapter(adapter);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
