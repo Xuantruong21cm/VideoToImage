@@ -17,7 +17,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5.7">
+            android:layout_weight="5.5">
             <VideoView
                 android:id="@+id/videoView_Play"
                 android:layout_width="match_parent"
@@ -30,12 +30,22 @@
                 android:layout_gravity="center"
                 android:src="@drawable/playvideo"
                 android:visibility="invisible" />
+
         </FrameLayout>
+
+        <SeekBar
+            android:visibility="invisible"
+            android:paddingLeft="@dimen/_4sdp"
+            android:paddingRight="@dimen/_4sdp"
+            android:id="@+id/skb_Progress"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3.3"
+            android:layout_weight="3.2"
             android:orientation="vertical"
             android:weightSum="3">
 
@@ -71,7 +81,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#4E4040"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="@dimen/_11sdp"
                         android:textStyle="bold"
                         tools:text="VideoName" />
 

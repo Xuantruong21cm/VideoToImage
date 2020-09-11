@@ -62,12 +62,12 @@ public class ImageSnaped_Adapter extends RecyclerView.Adapter<ImageSnaped_Adapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             img_snaped = itemView.findViewById(R.id.img_snaped);
-            Collections.sort(list, new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return Long.valueOf(o2.replaceAll("\\D","")).compareTo(Long.valueOf(o1.replaceAll("\\D","")));
-                }
-            });
+//            Collections.sort(list, new Comparator<String>() {
+//                @Override
+//                public int compare(String o1, String o2) {
+//                    return Long.valueOf(o2.replaceAll("\\D","")).compareTo(Long.valueOf(o1.replaceAll("\\D","")));
+//                }
+//            });
         }
     }
 }

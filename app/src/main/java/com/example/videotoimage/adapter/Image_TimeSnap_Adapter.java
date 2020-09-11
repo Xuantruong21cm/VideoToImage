@@ -60,12 +60,12 @@ public class Image_TimeSnap_Adapter extends RecyclerView.Adapter<Image_TimeSnap_
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             img_timesnap = itemView.findViewById(R.id.img_timesnap) ;
-            Collections.sort(list, new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return Long.valueOf(o2.replaceAll("\\D","")).compareTo(Long.valueOf(o1.replaceAll("\\D","")));
-                }
-            });
+//            Collections.sort(list, new Comparator<String>() {
+//                @Override
+//                public int compare(String o1, String o2) {
+//                    return Long.valueOf(o2.replaceAll("\\D","")).compareTo(Long.valueOf(o1.replaceAll("\\D","")));
+//                }
+//            });
         }
     }
 }
