@@ -1,5 +1,6 @@
 package com.example.videotoimage.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,25 +80,39 @@ public class PictureGallery_Fragment extends Fragment {
         img_delete_ListChoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagesList.removeAll(ImageSlide_Adapter.getList);
-                for (int i = 0; i <ImageSlide_Adapter.getList.size() ; i++) {
-                    File file = new File(ImageSlide_Adapter.getList.get(i).getPath());
-                    file.delete();
-                    if (file.exists()){
-                        try {
-                            file.getCanonicalFile().delete();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Delete Image ?") ;
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        imagesList.removeAll(ImageSlide_Adapter.getList);
+                        for (int i = 0; i <ImageSlide_Adapter.getList.size() ; i++) {
+                            File file = new File(ImageSlide_Adapter.getList.get(i).getPath());
+                            file.delete();
+                            if (file.exists()){
+                                try {
+                                    file.getCanonicalFile().delete();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (file.exists()){
+                                    getActivity().getApplicationContext().deleteFile(file.getAbsolutePath());
+                                }
+                            }
+                            CallBroadcast(file);
                         }
-                        if (file.exists()){
-                            getActivity().getApplicationContext().deleteFile(file.getAbsolutePath());
-                        }
+                        ImageSlide_Adapter.getList.clear();
+                        adapter.notifyDataSetChanged();
+                        layout_control_Picture_Gallery.setVisibility(View.INVISIBLE);
                     }
-                    CallBroadcast(file);
-                }
-                ImageSlide_Adapter.getList.clear();
-                adapter.notifyDataSetChanged();
-                layout_control_Picture_Gallery.setVisibility(View.INVISIBLE);
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
             }
         });
         img_reload_Choice.setOnClickListener(new View.OnClickListener() {

@@ -18,13 +18,13 @@
     <string name="Cancel">Cancel</string>
     <string name="Ok">Ok</string>
     <string name="Video_Length">Time cannot be longer than video length</string>
-    <string name="Status_Quotes">Status Quotes</string>
-    <string name="Author">Author: </string>
-    <string name="HDP_Solution">HDP Solution</string>
-    <string name="Privacy_Policy">Privacy Policy:</string>
-    <string name="web_policy">http://hdpsolution.com/privacy_policy/CameraApps/PrivacyPolicyCameraApp.html</string>
-    <string name="Email">Email:</string>
-    <string name="email_detail">Support@hdpsolution.com</string>
+    <string name="Status_Quotes" translatable="false">Status Quotes</string>
+    <string name="Author" translatable="false">Author: </string>
+    <string name="HDP_Solution" translatable="false">HDP Solution</string>
+    <string name="Privacy_Policy" translatable="false">Privacy Policy:</string>
+    <string name="web_policy" translatable="false">http://hdpsolution.com/privacy_policy/CameraApps/PrivacyPolicyCameraApp.html</string>
+    <string name="Email" translatable="false">Email:</string>
+    <string name="email_detail" translatable="false">Support@hdpsolution.com</string>
     <string name="Clear_Button">Clear All</string>
     <string name="Create">Create</string>
     <string name="Save">Save</string>

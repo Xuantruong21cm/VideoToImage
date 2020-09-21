@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:padding="@dimen/_16sdp"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:weightSum="10"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             android:textColor="#4A4343"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
             android:text="@string/Status_Quotes"
-            android:padding="@dimen/_8sdp"
-            android:layout_weight="0.9"
+            android:padding="@dimen/_4sdp"
+            android:layout_weight="0.7"
             android:layout_width="match_parent"
             android:layout_height="0dp"/>
         <View
@@ -23,17 +20,16 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"/>
         <ImageView
-            android:id="@+id/img_aboutUs"
-            android:padding="@dimen/_16sdp"
+            android:id="@+id/img_me"
+            android:padding="@dimen/_8sdp"
             android:layout_gravity="center"
-            android:src="@drawable/me"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"/>
+            android:layout_weight="2"/>
         <TextView
             android:textColor="#8F8585"
             android:gravity="center"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             android:text="@string/Author"
             android:layout_width="match_parent"
@@ -43,17 +39,16 @@
             android:id="@+id/tv_hdp_solution"
             android:textColor="#2196F3"
             android:gravity="center"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             android:text="@string/HDP_Solution"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"/>
         <TextView
-            android:layout_marginTop="@dimen/_12sdp"
             android:textColor="#8F8585"
             android:gravity="center"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             android:text="@string/Privacy_Policy"
             android:layout_width="match_parent"
@@ -61,8 +56,8 @@
             android:layout_weight="0.5"/>
         <TextView
             android:id="@+id/tv_web_policy"
-            android:paddingRight="@dimen/_8sdp"
-            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_4sdp"
+            android:paddingLeft="@dimen/_4sdp"
             android:textColor="#2196F3"
             android:gravity="center"
             android:textSize="@dimen/_12sdp"
@@ -72,10 +67,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <TextView
-            android:layout_marginTop="@dimen/_12sdp"
             android:textColor="#8F8585"
             android:gravity="center"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             android:text="@string/Email"
             android:layout_width="match_parent"
@@ -84,7 +78,7 @@
         <TextView
             android:textColor="#2196F3"
             android:gravity="center"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             android:text="@string/email_detail"
             android:layout_width="match_parent"
@@ -97,10 +91,8 @@
             android:textSize="@dimen/_16sdp"
             android:text="@string/Ok"
             android:padding="@dimen/_2sdp"
-            android:layout_marginTop="@dimen/_8sdp"
             android:layout_weight="1"
             android:layout_gravity="center|right"
             android:layout_width="wrap_content"
             android:layout_height="0dp"/>
     </LinearLayout>
-</FrameLayout>

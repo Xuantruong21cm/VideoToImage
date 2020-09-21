@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.videotoimage.R;
 import com.example.videotoimage.fragments.SelectVideo_Fragment;
 import com.example.videotoimage.fragments.Settings_Fragment;
@@ -141,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
                 Dialog dialog = new Dialog(MainActivity.this);
                 dialog.setContentView(R.layout.dialog_aboutus);
                 dialog.setCanceledOnTouchOutside(false);
-
+                ImageView img_me = dialog.findViewById(R.id.img_me) ;
+                Glide.with(MainActivity.this).load(R.drawable.me).into(img_me) ;
                 Button btn_ok_aboutUs = dialog.findViewById(R.id.btn_ok_aboutUs);
                 btn_ok_aboutUs.setOnClickListener(view -> {
                     dialog.dismiss();
                 });
-
 
                 dialog.show();
                 Window window = dialog.getWindow();

@@ -32,15 +32,25 @@
                 android:visibility="invisible" />
 
         </FrameLayout>
-
-        <SeekBar
-            android:visibility="invisible"
-            android:paddingLeft="@dimen/_4sdp"
-            android:paddingRight="@dimen/_4sdp"
-            android:id="@+id/skb_Progress"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"/>
+            android:layout_weight="0.3">
+            <SeekBar
+                android:visibility="invisible"
+                android:paddingLeft="@dimen/_4sdp"
+                android:paddingRight="@dimen/_4sdp"
+                android:id="@+id/skb_Progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:textStyle="bold"
+                android:visibility="invisible"
+                android:textColor="#FF0000"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/tv_progress"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +94,6 @@
                         android:textSize="@dimen/_11sdp"
                         android:textStyle="bold"
                         tools:text="VideoName" />
-
                     <SeekBar
                         android:id="@+id/skb_durationVideo"
                         android:layout_width="match_parent"

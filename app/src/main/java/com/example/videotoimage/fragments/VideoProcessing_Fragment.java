@@ -77,7 +77,7 @@ public class VideoProcessing_Fragment extends Fragment {
     OutputStream outputStream;
     public static Bitmap bitmap, bitmapSnap;
     EditText edt_timeSnap;
-    TextView tv_cancel_TimeSnap , tv_ok_TimeSnap ;
+    TextView tv_cancel_TimeSnap , tv_ok_TimeSnap ,tv_progress;
     public static int time, timesnap ;
     ArrayList<Bitmap> frameList ;
     MediaMetadataRetriever retriever ;
@@ -95,6 +95,7 @@ public class VideoProcessing_Fragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_video_processing_, container, false);
         recyclerView_TimeSnap = view.findViewById(R.id.recyclerView_TimeSnap);
+        tv_progress = view.findViewById(R.id.tv_progress) ;
         videoView_Play = view.findViewById(R.id.videoView_Play);
         img_controlVideo = view.findViewById(R.id.img_controlVideo);
         tv_timeStart = view.findViewById(R.id.tv_timeStart);
@@ -450,6 +451,7 @@ public class VideoProcessing_Fragment extends Fragment {
 
             frameList = new ArrayList<>() ;
             skb_Progress.setVisibility(View.VISIBLE);
+            tv_progress.setVisibility(View.VISIBLE);
         }
 
         @SuppressLint("WrongThread")
@@ -528,6 +530,31 @@ public class VideoProcessing_Fragment extends Fragment {
                     e.printStackTrace();
                 }
                 skb_Progress.setProgress((int) (i/duration_second*100));
+                skb_Progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                        int val = (progress * (seekBar.getWidth() -2 * seekBar.getThumbOffset()))/seekBar.getMax() ;
+                        tv_progress.setText("   "+progress +" % ");
+//                        tv_progress.setX(seekBar.getX() +  val + seekBar.getThumbOffset() /2);
+                        int width = seekBar.getWidth() - seekBar.getPaddingLeft() - seekBar.getPaddingRight();
+                        int thumbPos = seekBar.getPaddingLeft() + width * seekBar.getProgress() / seekBar.getMax();
+
+                        tv_progress.measure(0, 0);
+                        int txtW = tv_progress.getMeasuredWidth();
+                        int delta = txtW / 2;
+                        tv_progress.setX(seekBar.getX() + thumbPos - delta);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
             }
             Log.d("jjjj", "onOptionsItemSelected: "+frameList.size());
             skb_Progress.setProgress(100);
@@ -542,6 +569,7 @@ public class VideoProcessing_Fragment extends Fragment {
                 @Override
                 public void run() {
                     skb_Progress.setVisibility(View.INVISIBLE);
+                    tv_progress.setVisibility(View.INVISIBLE);
                 }
             }, 2500);
         }
